@@ -1,4 +1,3 @@
-import debug from "debug";
 import RoonApi from "node-roon-api";
 import RoonApiStatus from "node-roon-api-status";
 import RoonApiImage from "node-roon-api-image";
@@ -8,7 +7,6 @@ import fs from 'fs';
 import axios from "axios";
 import winston from "winston";
 
-const log = debug("server");
 const author = "Stef van Hooijdonk";
 const progressBarResolution = 100;
 const logLevels = {
@@ -26,8 +24,7 @@ export default class App {
   // ********************************************
   // * Constructors
   // ********************************************
-  constructor(config) {
-    log("ctor()", config);
+  constructor(config) {    
 
     this._config = config;
     this._zones = {};
@@ -44,6 +41,7 @@ export default class App {
         new winston.transports.File({ filename: "roonsteelseries.log", options: { flags: 'w' }  })],
     });
     
+    this.logger.debug("constructor with config: " + config)
     this._steelseriesAddress = this.findSteelSeriesEngineAddress();
     
     //this.registerSteelseriesGameAndEvent();

@@ -10,11 +10,10 @@
   "author": "Stef van Hooijdonk",
   "repository": {
     "type" : "git",
-    "url" : "https://github.com/docBliny/obs-roon-display.git"
+    "url" : "https://github.com:stefvanhooijdonk/roon-steelseries-nowplaying.git"
   },
   "license": "MIT",
-  "dependencies": {
-    "debug": "^4.3.1",
+  "dependencies": {  
     "node-roon-api": "github:roonlabs/node-roon-api",
     "node-roon-api-image": "github:roonlabs/node-roon-api-image",
     "node-roon-api-status": "github:roonlabs/node-roon-api-status",

@@ -10,7 +10,7 @@
   "author": "Stef van Hooijdonk",
   "repository": {
     "type" : "git",
-    "url" : "https://github.com:stefvanhooijdonk/roon-steelseries-nowplaying.git"
+    "url" : "https://github.com/stefvanhooijdonk/roon-steelseries-nowplaying.git"
   },
   "license": "MIT",
   "dependencies": {  

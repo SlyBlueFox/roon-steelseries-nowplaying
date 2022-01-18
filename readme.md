@@ -10,7 +10,7 @@ SPecial thanks to __docBliny__ and his work on the Roon / App part: https://gith
 ### Run the code
 
 I have this working with:
-- Node v17.3.1
+- Node v17.3.1 (installed via homebrew)
 - Roon v1.8 (build 884) running on ROCK
 - Steelseries GG for MacOSX 12.2 
 - Mac OSX Montery 12.1

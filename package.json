@@ -1,0 +1,29 @@
+{
+  "name": "svh-roon-steelseries",
+  "version": "1.0.0",
+  "description": "Displays what roon is playing for Steelseries OLEDs",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon -i config.json --exec node ."
+  },
+  "author": "Stef van Hooijdonk",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/docBliny/obs-roon-display.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "debug": "^4.3.1",
+    "node-roon-api": "github:roonlabs/node-roon-api",
+    "node-roon-api-image": "github:roonlabs/node-roon-api-image",
+    "node-roon-api-status": "github:roonlabs/node-roon-api-status",
+    "node-roon-api-transport": "github:roonlabs/node-roon-api-transport",
+    "slug": "^2.1.1",
+    "axios":"0.24.0",
+    "winston":"^3.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}

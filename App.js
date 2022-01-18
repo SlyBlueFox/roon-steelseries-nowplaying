@@ -9,7 +9,10 @@ import winston from "winston";
 import "winston-daily-rotate-file";
 
 const author = "Stef van Hooijdonk";
+
+// gamesense progress bars are always 0-100 based.
 const progressBarResolution = 100;
+
 const logLevels = {
   fatal: 0,
   error: 1,
@@ -59,7 +62,7 @@ export default class App {
 
     this._steelseriesAddress = this.findSteelSeriesEngineAddress();
     
-    //this.registerSteelseriesGameAndEvent();
+    this.registerSteelseriesGameAndEvent();
 
     this.checkOrRegistgerSteelseriesRegisteredEvent();
 
@@ -292,6 +295,7 @@ export default class App {
     let coreProps = JSON.parse(rawdata);
 
     this.logger.info("located steelseries gameengine at address:" + coreProps.address);
+    rawdata = null;
     return coreProps.address;
   }
 
@@ -303,15 +307,15 @@ export default class App {
       developer: author
     };    
 
-    // remove all.
-    axios
-      .post(this.getSteelseriesAPIUrl(this,"remove_game"),{game: this._steelseriesGameID})
-      .then(res => {
-        this.logger.info(`Remove Game in Steelseries Engine: statusCode: ${res.status}`)
-      })
-      .catch(error => {
-        this.logger.error(error)
-      });
+    // // remove all.
+    // axios
+    //   .post(this.getSteelseriesAPIUrl(this,"remove_game"),{game: this._steelseriesGameID})
+    //   .then(res => {
+    //     this.logger.info(`Remove Game in Steelseries Engine: statusCode: ${res.status}`)
+    //   })
+    //   .catch(error => {
+    //     this.logger.error(error)
+    //   });
 
     axios
       .post(this.getSteelseriesAPIUrl(this,"game_metadata"),roongame)
@@ -327,8 +331,6 @@ export default class App {
       event: this._steelseriesGameEventID,
       "icon_id": 23,
       "value_optional": true,
-      "min_value": 0,
-      "max_value": progressBarResolution,
       handlers: [{
           "device-type": "screened",
           mode: "screen",
@@ -385,7 +387,9 @@ export default class App {
         //console.log(`Sent event to Steelseries Engine: statusCode: ${res.status}`)
       })
       .catch(error => {
-        ctx.logger.error(error)
+        ctx.logger.error(error);
+        // maybe Steelseries Gamesense restarted and is using a new port:
+        ctx.findSteelSeriesEngineAddress();
       });    
   }
 

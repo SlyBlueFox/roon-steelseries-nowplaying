@@ -7,6 +7,13 @@ SPecial thanks to __docBliny__ and his work on the Roon / App part: https://gith
 ### How it looks on my Apex PRO TKL
 <img src="https://user-images.githubusercontent.com/17196910/149915870-f27a1b4f-24db-44b8-ac61-328960c2c630.jpg" alt="steelseries-apex-pro-tkl" title="steelseries-apex-pro-tkl" width="350"/>
 
+### Using
+
+This little _App_ relies on two SDK's.
+
+- [Roon NodeJS API](https://github.com/RoonLabs/node-roon-api)
+- [Steelseries Gamesense SDK](https://github.com/SteelSeries/gamesense-sdk)
+
 ### Run the code
 
 I have this working with:

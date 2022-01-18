@@ -60,12 +60,12 @@ export default class App {
     
     this._logger.debug("constructor with config: " + config);
 
-    this._steelseriesAddress = this.findSteelSeriesEngineAddress();
-    
+    this._steelseriesAddress = this.findSteelSeriesEngineAddress();  
+
     this.registerSteelseriesGameAndEvent();
 
     this.checkOrRegistgerSteelseriesRegisteredEvent();
-
+    
     this._roon = new RoonApi({
       extension_id:        "svh-roon-steelseries",
       display_name:        "Simple Now Playing display intended for Steelseries Oleds",
@@ -133,14 +133,12 @@ export default class App {
         this.logger.info("Subscribed to Roon");
         this.logger.debug(data);
         this.setZonesFromData(data.zones);
-        this.emitAllZones(this.zones);
         break;
       case "Changed":
         if(data.zones_changed) {
           this.logger.info("Roon zones changed.");
           this.logger.debug(data);
           this.setZonesFromData(data.zones_changed);
-          this.emitAllZones(this.zones);
         }
 
         if(data.zones_seek_changed) {
@@ -237,15 +235,17 @@ export default class App {
     return result;
   }  
 
-  scrollTextToDisplay(ctx, currentZone){    
-    var progressBar = 0;
-    var artists = "";
-    var songtitle = "";
-    var album = "";
-    
+  scrollTextToDisplay(ctx, currentZone){        
     if(currentZone && currentZone.now_playing){
+
+      var progressBar = 0;
+      var artists = "";
+      var songtitle = "";
+      var album = "";
+
       // calcuate progress 0<100;
-      progressBar = Math.floor(currentZone.now_playing.seek_position / currentZone.now_playing.length * progressBarResolution);
+      progressBar = Math.floor(currentZone.now_playing.seek_position / 
+        currentZone.now_playing.length * progressBarResolution);
       // read data
       artists = currentZone.now_playing.two_line.line2;
       songtitle = currentZone.now_playing.two_line.line1;
@@ -253,6 +253,8 @@ export default class App {
 
       // scroll song title if too long.
       var scrollingText = songtitle;
+
+      // about 16 chars fit on zone one of Steelseries OLEDS
       if(scrollingText.length > 16){
         scrollingText = songtitle.substring( ctx._textIndex) + "  | ";
         if(ctx._textIndex > 0) {
@@ -286,9 +288,6 @@ export default class App {
     }
   }
 
-  emitAllZones(zones) {
-  }
-
   findSteelSeriesEngineAddress(){
 
     let rawdata = fs.readFileSync('/Library/Application Support/SteelSeries Engine 3/coreProps.json');
@@ -306,16 +305,6 @@ export default class App {
       game_display_name: "Roon Display Song",      
       developer: author
     };    
-
-    // // remove all.
-    // axios
-    //   .post(this.getSteelseriesAPIUrl(this,"remove_game"),{game: this._steelseriesGameID})
-    //   .then(res => {
-    //     this.logger.info(`Remove Game in Steelseries Engine: statusCode: ${res.status}`)
-    //   })
-    //   .catch(error => {
-    //     this.logger.error(error)
-    //   });
 
     axios
       .post(this.getSteelseriesAPIUrl(this,"game_metadata"),roongame)
@@ -357,6 +346,8 @@ export default class App {
   }
 
   checkOrRegistgerSteelseriesRegisteredEvent(){
+    var check = false;
+
     var testevent = {
       game: this._steelseriesGameID,
       event: this._steelseriesGameEventID,
@@ -368,6 +359,7 @@ export default class App {
         }        
       }
     };
+
     axios
       .post(this.getSteelseriesAPIUrl(this,"game_event"), testevent)
       .then(res => {
@@ -375,8 +367,22 @@ export default class App {
       })
       .catch(error => {
         this.logger.error(`Failed to Test event to Steelseries Engine, re-init: statusCode: ${res.status}`)
-        this.registerSteelseriesGameAndEvent();
+        this.removeGameFromSteelseries();
       });    
+  }
+
+  removeGameFromSteelseries(){
+      // remove all.
+    axios
+      .post(this.getSteelseriesAPIUrl(this,"remove_game"),{game: this._steelseriesGameID})
+      .then(res => {
+        this.logger.info(`Remove Game in Steelseries Engine: statusCode: ${res.status}`);
+        this.registerSteelseriesGameAndEvent();
+      })
+      .catch(error => {
+        this.logger.error(error)
+      });
+
   }
 
   sendNowPlayingUpdateToSteelseries(ctx, nowplayingevent){

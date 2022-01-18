@@ -120,6 +120,7 @@ export default class App {
       case "Changed":
         if(data.zones_changed) {
           this.logger.info("Roon zones changed.");
+          this.logger.debug(data);
           this.setZonesFromData(data.zones_changed);
           this.emitAllZones(this.zones);
         }
@@ -166,6 +167,13 @@ export default class App {
         // Track by native zone ID. This will keep our unique names consistent while we're running
         this._zones[zone.zone_id] = zone;
 
+        // log current zone statusses
+        if(zone.state == "paused" || zone.state == "playing"){
+          this.logger.info(zone.display_name + " is " + zone.state + ": " + zone.now_playing.one_line.line1);
+        }
+        else {
+          this.logger.info(zone.display_name + " is " + zone.state);
+        }
       });
     }
 
@@ -251,8 +259,8 @@ export default class App {
         }
       };
       // first few seconds (currentZone.now_playing.seek_position) we shop Now playing
-      if(currentZone.now_playing && currentZone.now_playing.seek_position<4){
-        nowplayingevent.data.frame.songtitle = currentZone._zoneName + " now playing:";
+      if(currentZone.now_playing && currentZone.now_playing.seek_position < 4){
+        nowplayingevent.data.frame.songtitle = currentZone._zoneName + " is now playing:";
         nowplayingevent.data.frame.artists = songtitle;
       }
 

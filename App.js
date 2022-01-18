@@ -6,6 +6,7 @@ import slug from "slug";
 import fs from 'fs';
 import axios from "axios";
 import winston from "winston";
+import "winston-daily-rotate-file";
 
 const author = "Stef van Hooijdonk";
 const progressBarResolution = 100;
@@ -35,13 +36,27 @@ export default class App {
     this._steelseriesGameID = "SVHROON";
     this._steelseriesGameEventID = "NOWPLAYING";
 
+    var logfiletransport = new winston.transports.DailyRotateFile(      
+      { 
+        filename: "roonsteelseries-%DATE%.log", 
+        datePattern: 'YYYY-MM-DD',
+        maxSize: '20m',
+        maxFiles: '3d',
+        options: { flags: 'w' }  } );
+
+    logfiletransport.on('rotate', function(oldFilename, newFilename) {
+      console.log("Rotated logs, now using:" + newFilename );
+    });
+
     this._logger = winston.createLogger({
       levels: logLevels,
-      transports: [new winston.transports.Console({ }),
-        new winston.transports.File({ filename: "roonsteelseries.log", options: { flags: 'w' }  })],
-    });
+      transports: [
+        new winston.transports.Console({ }),
+        logfiletransport  
+        ]});
     
-    this.logger.debug("constructor with config: " + config)
+    this._logger.debug("constructor with config: " + config);
+    
     this._steelseriesAddress = this.findSteelSeriesEngineAddress();
     
     //this.registerSteelseriesGameAndEvent();
@@ -138,7 +153,7 @@ export default class App {
   }
 
   coreUnpaired(core) {
-    this.logger("Roon core unpaired");
+    core.moo.transport.logger.log("Roon core unpaired");    
     this._nowPlaying = null;
   }
 

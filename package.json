@@ -20,7 +20,8 @@
     "node-roon-api-transport": "github:roonlabs/node-roon-api-transport",
     "slug": "^2.1.1",
     "axios":"0.24.0",
-    "winston":"^3.4.0"
+    "winston":"^3.4.0",
+    "winston-daily-rotate-file":"^4.5.5"
   },
   "devDependencies": {
     "nodemon": "^2.0.3"

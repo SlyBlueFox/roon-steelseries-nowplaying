@@ -56,7 +56,7 @@ export default class App {
         ]});
     
     this._logger.debug("constructor with config: " + config);
-    
+
     this._steelseriesAddress = this.findSteelSeriesEngineAddress();
     
     //this.registerSteelseriesGameAndEvent();
@@ -183,8 +183,8 @@ export default class App {
         this._zones[zone.zone_id] = zone;
 
         // log current zone statusses
-        if(zone.state == "paused" || zone.state == "playing"){
-          this.logger.info(zone.display_name + " is " + zone.state + ": " + zone.now_playing.one_line.line1);
+        if(zone.state == "playing"){
+          this.logger.info(zone.display_name + " is " + zone.state + " song " + zone.now_playing.one_line.line1);
         }
         else {
           this.logger.info(zone.display_name + " is " + zone.state);

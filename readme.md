@@ -34,6 +34,9 @@ And run the server from the command line:
 node .
 ```
 
+If all is well, this node App should now show up in your Roon Extentions. Go and enable it there. Once that is done, and you start playing songs via Roon in your zone you should see the song title scrolling, the artists and a progress bar for the song play duration.
+There is a log file roonsteelseries.log in the folder to check.
+
 ### Install as a Service on Mac OSX
 
 You will need to *install* this app on the machine that has the Steelseries keyboard/mouse connected that have an OLED screen.

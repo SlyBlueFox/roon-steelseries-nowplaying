@@ -8,6 +8,11 @@ import axios from "axios";
 import winston from "winston";
 import "winston-daily-rotate-file";
 
+// import process for detecting OS and Steelseries folder
+import process from "process";
+var env = process.env;
+var os = process.platform;
+
 const author = "Stef van Hooijdonk";
 
 // gamesense progress bars are always 0-100 based.
@@ -289,8 +294,16 @@ export default class App {
   }
 
   findSteelSeriesEngineAddress(){
+    var steelSeriesDir;
 
-    let rawdata = fs.readFileSync('/Library/Application Support/SteelSeries Engine 3/coreProps.json');
+    // read file from correct location based on operating system
+    if (os == "darwin") {
+      steelSeriesDir = '/Library/Application Support/SteelSeries Engine 3/coreProps.json';
+    } else if (os == "win32" || os == "win64") {
+      steelSeriesDir = (env.ALLUSERSPROFILE + '\\SteelSeries\\SteelSeries Engine 3\\coreProps.json');
+    }
+
+    let rawdata = fs.readFileSync(steelSeriesDir);
     let coreProps = JSON.parse(rawdata);
 
     this.logger.info("located steelseries gameengine at address:" + coreProps.address);
